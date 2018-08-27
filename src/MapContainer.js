@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-//import Marker from './Marker'
 import InfoWindow from './InfoWindow'
-//import Map from './Map'
 import { Map, Marker } from 'google-maps-react'
 import SearchMenu from './SearchMenu';
 
@@ -9,8 +7,9 @@ class MapContainer extends Component {
     constructor(props) {
         super(props);
         this.onMarkerClick = this.onMarkerClick.bind(this);
-        this.onMapClicked = this.onMapClicked.bind(this);
+        this.onMapClick = this.onMapClick.bind(this);
         this.onInfoWindowClose = this.onInfoWindowClose.bind(this);
+
         this.state = {
             locations: [
                 {
@@ -37,11 +36,17 @@ class MapContainer extends Component {
                     title: 'Boyana Church',
                     location: {lat: 42.68699209438178, lng: 23.319474692998153},
                     visible: true
+                },
+                {
+                    title: 'Yavor`s home',
+                    location: {lat: 42.616068, lng: 23.420815},
+                    visible: true
                 }
             ],
             showingInfoWindow: false,
             activeMarker: {},
-            selectedPlace: ""
+            selectedPlace: "",
+            query: ""
         }
     }
 
@@ -50,15 +55,22 @@ class MapContainer extends Component {
           selectedPlace: props,
           activeMarker: marker,
           showingInfoWindow: true
-        });
+        })
     }
 
-    onMapClicked(props) {
+    onMapClick(props) {
         if (this.state.showingInfoWindow) {
           this.setState({
             showingInfoWindow: false,
             activeMarker: null
           })
+        }
+    }
+
+    onListClick = (location) => {
+        var markerToClick = document.querySelector(`area[title="${location}"]`);
+        if(markerToClick !== null) {
+            markerToClick.click()
         }
     }
 
@@ -69,25 +81,40 @@ class MapContainer extends Component {
         })
     }
 
+    filterText = (query) => {
+        for (const location of this.state.locations) {
+            if(location.title.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+                //locations.push(location)
+                location.visible = true
+            } else {
+                location.visible = false
+            }
+        }
+        this.setState({ query})
+    }
+
     render() {
         const style = {
             width: '100vw',
             height: '100vh'
-          }
+        }
+
         return(
             <div className="map-container" style={style}>
             <Map 
                 google={this.props.google} 
                 initialCenter={{lat: 42.639830774, lng: 23.259332296}} 
                 zoom={12} 
-                onClick={this.onMapClicked}>
+                onClick={this.onMapClick}>
             {this.state.locations.filter(location => location.visible).map( (location, index) => (
                 <Marker 
                     key={index} 
                     title={location.title}
                     position={location.location} 
-                    animation={window.google.maps.Animation.DROP}
+                    //animation={window.google.maps.Animation.BOUNCE}
                     onClick={this.onMarkerClick}
+                    onInfoWindowOpen={this.onInfoWindowOpen} 
+                    ondomready={this.onListClick}
                 />
             ))}
             <InfoWindow
@@ -101,8 +128,8 @@ class MapContainer extends Component {
             </Map>
             <SearchMenu
                 locations={this.state.locations}
-                marker={this.state.activeMarker}
-                filterButton={this.filterButton}
+                updateText={this.filterText}
+                onListClick={this.onListClick}
             ></SearchMenu>
             </div>
         )
