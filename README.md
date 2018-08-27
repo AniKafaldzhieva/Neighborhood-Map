@@ -16,5 +16,6 @@ This is the final project of Udacity Nanodegree program. The main goal is to dev
 * [create-react-app](https://github.com/facebook/create-react-app)
 * [google-maps-react](https://github.com/fullstackreact/google-maps-react)
 * [Foursquare API](https://foursquare.com/)
+* [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/tutorial)
 
 
