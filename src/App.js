@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { GoogleApiWrapper } from 'google-maps-react' 
 import MapContainer from './MapContainer';
-import ErrorBoundary from './ErrorBoundary'
 import './App.css';
 
 window.gm_authFailure = () => {
@@ -12,11 +11,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <ErrorBoundary>
         <MapContainer 
           google={this.props.google}
         />
-      </ErrorBoundary>
       </div>
     );
   }
