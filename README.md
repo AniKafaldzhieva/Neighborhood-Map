@@ -25,6 +25,6 @@ To build the app for production to the build folder run the command below in the
 
 * npm run build
 
-For more information, you can read the [article](https://reactjs.org/docs/optimizing-performance.html)
+For more information, you can read the [article](https://reactjs.org/docs/optimizing-performance.html).
 
 
