@@ -18,4 +18,12 @@ This is the final project of Udacity Nanodegree program. The main goal is to dev
 * [Foursquare API](https://foursquare.com/)
 * [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/tutorial)
 
+## Important!
+
+The service worker is available only in production build mode.
+To build the app for production to the build folder run the command below in the terminal:
+
+* npm run build
+
+
 
