@@ -7,6 +7,10 @@ window.gm_authFailure = () => {
   alert("Something went wrong. Please, check your Google API key!")
 }
 
+window.addEventListener("unhandledrejection", function (event) {
+  console.warn("WARNING: Unhandled promise rejection. Reason: " + event.reason);
+});
+
 class App extends Component {
   render() {
     return (
