@@ -74,7 +74,7 @@ class InfoWindow extends  React.Component {
                       var photo = `<img alt="${venueName}" src="${photos.response.photos.items[0].prefix}150x150${photos.response.photos.items[0].suffix}"/>`
                       self.infowindow.setContent(venueName + venueLocation + photo)
                   }).catch(() => {
-                    self.infowindow.setContent("Sorry, the data cound not be loaded.")
+                    self.infowindow.setContent("Sorry, the data could not be loaded.")
                   })
               }
           )
