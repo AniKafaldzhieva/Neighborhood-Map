@@ -41,8 +41,14 @@ class InfoWindow extends  React.Component {
         .addListener(iw, 'domready', this.onOpen.bind(this));
     }
 
+    handleErrors(response) {
+      if (!response.ok) {
+          throw Error(response.statusText);
+      }
+      return response;
+    }
+
     updateContent() {
-      //const content = this.props.marker.title;
       var self = this;
       var clientId = "IH1PNJT2DXQQZXT0WOUBI0RJTNOS02KIUZ4YN1QF1N3B1OHJ"
       var clientSecret = "BRIR5GS0UKCYBKYHXG4EPSPR5UE5ZDWI0QO53AWXGIAT3V0Q"
@@ -56,29 +62,29 @@ class InfoWindow extends  React.Component {
       var venueName = null;
       var venueLocation = null;
 
-        fetch(url)
-          .then(
-              function(res) {
-                  res.json().then(function(data) {
-                      //console.log(data)
-                      venueId = data.response.venues[0].id
-                      //console.log(venueId)
-                      venueName = `<p>${data.response.venues[0].name}</p>`
-                      //console.log(venueName)
-                      venueLocation = `<p>${data.response.venues[0].location.address}</p>`
-                      //self.infowindow.setContent(name + location)
-                  }).then(() => {
-                      return fetch(`https://api.foursquare.com/v2/venues/${venueId}/photos?&oauth_token=HQ5MVSKWWJN0KJVL3X4NHQSHGBVEWWCDTJC01EAKZK3QBOTG&v=20180826`)
-                  }).then(response => response.json())
-                  .then(function(photos) {
-                      var photo = `<img alt="${venueName}" src="${photos.response.photos.items[0].prefix}150x150${photos.response.photos.items[0].suffix}"/>`
-                      self.infowindow.setContent(venueName + venueLocation + photo)
-                  }).catch(() => {
-                    self.infowindow.setContent("Sorry, the data could not be loaded.")
-                  })
-              }
-          )
-      }
+      fetch(url)
+        .then(this.handleErrors)
+        .then(
+            function(res) {
+              res.json().then(function(data) {
+                //console.log(data) test the data
+                venueId = data.response.venues[0].id
+                venueName = `<p tabIndex={0}>${data.response.venues[0].name}</p>`
+                venueLocation = `<p>${data.response.venues[0].location.address}</p>`
+              }).then(() => {
+                return fetch(`https://api.foursquare.com/v2/venues/${venueId}/photos?&oauth_token=HQ5MVSKWWJN0KJVL3X4NHQSHGBVEWWCDTJC01EAKZK3QBOTG&v=20180826`)
+              }).then(response => response.json())
+              .then(function(photos) {
+                var photo = `<img alt="${venueName}" src="${photos.response.photos.items[0].prefix}150x150${photos.response.photos.items[0].suffix}"/>`
+                self.infowindow.setContent(venueName + venueLocation + photo)
+              }).catch(() => {
+                self.infowindow.setContent("Sorry, the data could not be loaded.")
+              })
+            }
+        ).catch(() => {
+          self.infowindow.setContent("Sorry, the data could not be loaded. Please, check you Foursquare API key.");
+      });
+    }
 
     onOpen() {
       if (this.props.onOpen) this.props.onOpen();
