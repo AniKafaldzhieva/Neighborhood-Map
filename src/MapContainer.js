@@ -51,6 +51,13 @@ class MapContainer extends Component {
     }
 
     onMarkerClick(props, marker, e) {
+        //In case I need it later
+        //marker.setIcon('https://www.google.com/mapfiles/marker_green.png') 
+        marker.setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(()=> {
+          marker.setAnimation(null)
+        }, 800)
+
         this.setState({
           selectedPlace: props,
           activeMarker: marker,
@@ -84,7 +91,6 @@ class MapContainer extends Component {
     filterText = (query) => {
         for (const location of this.state.locations) {
             if(location.title.toLowerCase().indexOf(query.toLowerCase()) !== -1) {
-                //locations.push(location)
                 location.visible = true
             } else {
                 location.visible = false
@@ -100,37 +106,38 @@ class MapContainer extends Component {
         }
 
         return(
-            <div className="map-container" style={style}>
-            <Map 
-                google={this.props.google} 
-                initialCenter={{lat: 42.639830774, lng: 23.259332296}} 
-                zoom={12} 
-                onClick={this.onMapClick}>
-            {this.state.locations.filter(location => location.visible).map( (location, index) => (
-                <Marker 
-                    key={index} 
-                    title={location.title}
-                    position={location.location} 
-                    //animation={window.google.maps.Animation.BOUNCE}
-                    onClick={this.onMarkerClick}
-                    onInfoWindowOpen={this.onInfoWindowOpen} 
-                    ondomready={this.onListClick}
-                />
-            ))}
-            <InfoWindow
-                marker={this.state.activeMarker}
-                visible={this.state.showingInfoWindow}
-                onClose={this.onInfoWindowClose}>
+            <div className="map-container" role="main" aria-label="Google map" style={style}>
+                <Map 
+                    google={this.props.google} 
+                    initialCenter={{lat: 42.639830774, lng: 23.259332296}} 
+                    zoom={12} 
+                    onClick={this.onMapClick}>
+                {this.state.locations.filter(location => location.visible).map( (location, index) => (
+                    <Marker 
+                        key={index} 
+                        title={location.title}
+                        position={location.location} 
+                        onClick={this.onMarkerClick}
+                        onInfoWindowOpen={this.onInfoWindowOpen} 
+                        ondomready={this.onListClick}
+                        draggable={true}
+                        animation={window.google.maps.Animation.DROP}
+                    />
+                ))}
+                <InfoWindow
+                    marker={this.state.activeMarker}
+                    visible={this.state.showingInfoWindow}
+                    onClose={this.onInfoWindowClose}>
             <div>
               <h1>{this.state.selectedPlace.name}</h1>
             </div>
-            </InfoWindow>
-            </Map>
-            <SearchMenu
-                locations={this.state.locations}
-                updateText={this.filterText}
-                onListClick={this.onListClick}
-            ></SearchMenu>
+                </InfoWindow>
+                </Map>
+                <SearchMenu
+                    locations={this.state.locations}
+                    updateText={this.filterText}
+                    onListClick={this.onListClick}
+                ></SearchMenu>
             </div>
         )
     }
