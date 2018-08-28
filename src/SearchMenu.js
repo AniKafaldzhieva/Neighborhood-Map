@@ -9,16 +9,21 @@ const SearchMenu = function(props) {
                 <p className="searchText">Search location</p>
             </div>
                 <input type="checkbox" className="openSidebarMenu" id="openSidebarMenu"/>
-                    <label htmlFor="openSidebarMenu" className="sidebarIconToggle" aria-label="Toggled button">
-                        <div className="spinner diagonal part-1"></div>
-                        <div className="spinner horizontal"></div>
-                        <div className="spinner diagonal part-2"></div>
+                    <label 
+                        tabIndex={0} 
+                        role="button" 
+                        aria-label="Toggled button" 
+                        htmlFor="openSidebarMenu" 
+                        className="sidebarIconToggle">
+                            <div  className="spinner diagonal part-1"></div>
+                            <div className="spinner horizontal"></div>
+                            <div className="spinner diagonal part-2"></div>
                     </label>
             <div id="sidebarMenu">
                 <input 
                     type="text" 
                     className="searchField" 
-                    aria-labelledby="search"
+                    aria-labelledby="searchText"
                     placeholder="Search" 
                     onChange={(e) => props.updateText(e.target.value)}
                 />
@@ -28,7 +33,7 @@ const SearchMenu = function(props) {
                             key={index} 
                             tabIndex={0} 
                             role="button" 
-                            onClick={ () => props.onListClick(location.title) } 
+                            onClick={ (e) => props.onListClick(location.title) } 
                             onKeyPress={ () => props.onListClick(location.title) }>
                             {location.title}
                         </li> )})}
